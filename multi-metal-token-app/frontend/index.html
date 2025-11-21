@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India's First Multi-Metal Token App - Buy Gold + Silver + Platinum + Stablecoin</title>
+    <meta name="description" content="Trade Gold, Silver, Platinum & Stablecoin tokens with India's most advanced RWA tokenization platform. 1% spread, ₹50/month SIP, 0.1-0.5% swap fees.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-coins"></i>
+                <span>MultiMetal Token</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#dashboard" class="nav-link active">
+                    <i class="fas fa-chart-pie"></i>
+                    Dashboard
+                </a>
+                <a href="#trade" class="nav-link">
+                    <i class="fas fa-exchange-alt"></i>
+                    Trade
+                </a>
+                <a href="#portfolio" class="nav-link">
+                    <i class="fas fa-wallet"></i>
+                    Portfolio
+                </a>
+                <a href="#sip" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    SIP
+                </a>
+                <a href="#history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    History
+                </a>
+                <a href="#fees" class="nav-link">
+                    <i class="fas fa-calculator"></i>
+                    Fees
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="market-status" id="marketStatus">
+                    <div class="status-dot"></div>
+                    <span>Markets Open</span>
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <button class="user-btn" onclick="toggleUserMenu()">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Guest User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#profile"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#support"><i class="fas fa-headset"></i> Support</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <p>Your comprehensive portfolio overview</p>
+                </div>
+                
+                <!-- Portfolio Summary Cards -->
+                <div class="portfolio-summary">
+                    <div class="summary-card primary">
+                        <div class="card-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Portfolio Value</h3>
+                            <div class="amount" id="totalValue">₹0</div>
+                            <div class="change" id="totalChange">+₹0 (0.00%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon gold">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Gold Holdings</h3>
+                            <div class="amount" id="goldValue">0.000 g</div>
+                            <div class="change" id="goldChange">₹0 (0.00%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon silver">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Silver Holdings</h3>
+                            <div class="amount" id="silverValue">0.000 g</div>
+                            <div class="change" id="silverChange">₹0 (0.00%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon platinum">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Platinum Holdings</h3>
+                            <div class="amount" id="platinumValue">0.000 g</div>
+                            <div class="change" id="platinumChange">₹0 (0.00%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon stablecoin">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Stablecoin (BINR)</h3>
+                            <div class="amount" id="stablecoinValue">0.000</div>
+                            <div class="change">₹0 (0.00%)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Market Rates -->
+                <div class="market-rates">
+                    <div class="section-header">
+                        <h2>Live Market Rates</h2>
+                        <div class="last-updated">
+                            <i class="fas fa-clock"></i>
+                            <span id="lastUpdated">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rates-grid">
+                        <div class="rate-card gold-rate" data-asset="gold">
+                            <div class="rate-header">
+                                <div class="rate-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="rate-info">
+                                    <h3>Gold</h3>
+                                    <span class="rate-unit">per gram</span>
+                                </div>
+                            </div>
+                            <div class="rate-price">
+                                <span id="goldRate">₹6,025.50</span>
+                                <div class="rate-change" id="goldChange">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+₹15.30 (+0.25%)</span>
+                                </div>
+                            </div>
+                            <div class="rate-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openTradeModal('gold', 'buy')">Buy</button>
+                                <button class="btn btn-secondary btn-sm" onclick="openTradeModal('gold', 'sell')">Sell</button>
+                            </div>
+                        </div>
+                        
+                        <div class="rate-card silver-rate" data-asset="silver">
+                            <div class="rate-header">
+                                <div class="rate-icon">
+                                    <i class="fas fa-medal"></i>
+                                </div>
+                                <div class="rate-info">
+                                    <h3>Silver</h3>
+                                    <span class="rate-unit">per gram</span>
+                                </div>
+                            </div>
+                            <div class="rate-price">
+                                <span id="silverRate">₹76.80</span>
+                                <div class="rate-change" id="silverChange">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+₹0.85 (+1.12%)</span>
+                                </div>
+                            </div>
+                            <div class="rate-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openTradeModal('silver', 'buy')">Buy</button>
+                                <button class="btn btn-secondary btn-sm" onclick="openTradeModal('silver', 'sell')">Sell</button>
+                            </div>
+                        </div>
+                        
+                        <div class="rate-card platinum-rate" data-asset="platinum">
+                            <div class="rate-header">
+                                <div class="rate-icon">
+                                    <i class="fas fa-gem"></i>
+                                </div>
+                                <div class="rate-info">
+                                    <h3>Platinum</h3>
+                                    <span class="rate-unit">per gram</span>
+                                </div>
+                            </div>
+                            <div class="rate-price">
+                                <span id="platinumRate">₹2,825.30</span>
+                                <div class="rate-change" id="platinumChange">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>-₹12.75 (-0.45%)</span>
+                                </div>
+                            </div>
+                            <div class="rate-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openTradeModal('platinum', 'buy')">Buy</button>
+                                <button class="btn btn-secondary btn-sm" onclick="openTradeModal('platinum', 'sell')">Sell</button>
+                            </div>
+                        </div>
+                        
+                        <div class="rate-card stablecoin-rate" data-asset="stablecoin">
+                            <div class="rate-header">
+                                <div class="rate-icon">
+                                    <i class="fas fa-rupee-sign"></i>
+                                </div>
+                                <div class="rate-info">
+                                    <h3>BINR Stablecoin</h3>
+                                    <span class="rate-unit">1 BINR = 1 INR</span>
+                                </div>
+                            </div>
+                            <div class="rate-price">
+                                <span id="stablecoinRate">₹1.00</span>
+                                <div class="rate-change">
+                                    <i class="fas fa-minus"></i>
+                                    <span>₹0.00 (0.00%)</span>
+                                </div>
+                            </div>
+                            <div class="rate-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openTradeModal('stablecoin', 'buy')">Buy</button>
+                                <button class="btn btn-secondary btn-sm" onclick="openTradeModal('stablecoin', 'sell')">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Transactions -->
+                <div class="recent-transactions">
+                    <div class="section-header">
+                        <h2>Recent Transactions</h2>
+                        <a href="#history" class="view-all">View All</a>
+                    </div>
+                    <div class="transactions-list" id="recentTransactions">
+                        <div class="transaction-item">
+                            <div class="tx-icon buy">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="tx-details">
+                                <div class="tx-type">Buy Gold</div>
+                                <div class="tx-time">2 minutes ago</div>
+                            </div>
+                            <div class="tx-amount">+2.5 g</div>
+                        </div>
+                        <div class="transaction-item">
+                            <div class="tx-icon sell">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="tx-details">
+                                <div class="tx-type">Sell Silver</div>
+                                <div class="tx-time">1 hour ago</div>
+                            </div>
+                            <div class="tx-amount">-50 g</div>
+                        </div>
+                        <div class="transaction-item">
+                            <div class="tx-icon swap">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="tx-details">
+                                <div class="tx-type">Swap Gold to Platinum</div>
+                                <div class="tx-time">3 hours ago</div>
+                            </div>
+                            <div class="tx-amount">0.5 g → 0.2 g</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trade Section -->
+        <section id="trade" class="content-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Trade Assets</h1>
+                    <p>Buy, sell, and swap between Gold, Silver, Platinum, and Stablecoin</p>
+                </div>
+                
+                <div class="trade-interface">
+                    <!-- Trade Tabs -->
+                    <div class="trade-tabs">
+                        <button class="tab-btn active" onclick="switchTradeTab('buy')">Buy</button>
+                        <button class="tab-btn" onclick="switchTradeTab('sell')">Sell</button>
+                        <button class="tab-btn" onclick="switchTradeTab('swap')">Swap</button>
+                    </div>
+                    
+                    <!-- Buy/Sell Interface -->
+                    <div class="trade-panel" id="buySellPanel">
+                        <div class="asset-selector">
+                            <label>Select Asset</label>
+                            <div class="asset-options">
+                                <button class="asset-btn active" data-asset="gold" onclick="selectAsset('gold')">
+                                    <i class="fas fa-coins"></i>
+                                    <span>Gold</span>
+                                </button>
+                                <button class="asset-btn" data-asset="silver" onclick="selectAsset('silver')">
+                                    <i class="fas fa-medal"></i>
+                                    <span>Silver</span>
+                                </button>
+                                <button class="asset-btn" data-asset="platinum" onclick="selectAsset('platinum')">
+                                    <i class="fas fa-gem"></i>
+                                    <span>Platinum</span>
+                                </button>
+                                <button class="asset-btn" data-asset="stablecoin" onclick="selectAsset('stablecoin')">
+                                    <i class="fas fa-rupee-sign"></i>
+                                    <span>BINR</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="trade-form">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <div class="input-group">
+                                    <input type="number" id="tradeAmount" placeholder="Enter amount" min="0" step="0.001" onchange="calculateTrade()">
+                                    <select id="amountUnit">
+                                        <option value="asset">g / BINR</option>
+                                        <option value="inr">INR</option>
+                                    </select>
+                                </div>
+                                <div class="input-hint">
+                                    <span>Min: <span id="minAmount">0.1</span> g</span>
+                                    <span>Available: <span id="availableBalance">0</span> g</span>
+                                </div>
+                            </div>
+                            
+                            <div class="current-rate">
+                                <div class="rate-display">
+                                    <span>Current Rate:</span>
+                                    <strong id="currentRate">₹6,025.50</strong>
+                                </div>
+                                <div class="spread-info">
+                                    <small>Spread: 1% (Bid: ₹5,965.25 | Ask: ₹6,085.75)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="fee-breakdown" id="feeBreakdown">
+                                <div class="fee-item">
+                                    <span>Principal Amount:</span>
+                                    <span id="principalAmount">₹0</span>
+                                </div>
+                                <div class="fee-item">
+                                    <span>Spread Fee (1%):</span>
+                                    <span id="spreadFee">₹0</span>
+                                </div>
+                                <div class="fee-item">
+                                    <span>Platform Fee (0.1%):</span>
+                                    <span id="platformFee">₹0</span>
+                                </div>
+                                <div class="fee-item">
+                                    <span>GST (18%):</span>
+                                    <span id="gstFee">₹0</span>
+                                </div>
+                                <div class="fee-item total">
+                                    <span>Total Cost:</span>
+                                    <span id="totalCost">₹0</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg" id="tradeBtn" onclick="executeTrade()">
+                                <i class="fas fa-shopping-cart"></i>
+                                Buy Gold
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Swap Interface -->
+                    <div class="trade-panel hidden" id="swapPanel">
+                        <div class="swap-interface">
+                            <div class="swap-from">
+                                <label>From</label>
+                                <div class="swap-asset">
+                                    <select id="swapFromAsset">
+                                        <option value="gold">Gold</option>
+                                        <option value="silver">Silver</option>
+                                        <option value="platinum">Platinum</option>
+                                        <option value="stablecoin">BINR</option>
+                                    </select>
+                                    <input type="number" id="swapFromAmount" placeholder="Amount" onchange="calculateSwap()">
+                                </div>
+                                <div class="balance-info">Available: <span id="swapFromBalance">0</span></div>
+                            </div>
+                            
+                            <div class="swap-arrow">
+                                <button onclick="swapAssets()" class="swap-btn">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="swap-to">
+                                <label>To</label>
+                                <div class="swap-asset">
+                                    <select id="swapToAsset">
+                                        <option value="silver">Silver</option>
+                                        <option value="gold">Gold</option>
+                                        <option value="platinum">Platinum</option>
+                                        <option value="stablecoin">BINR</option>
+                                    </select>
+                                    <input type="number" id="swapToAmount" placeholder="Amount" readonly>
+                                </div>
+                                <div class="balance-info">You'll receive: <span id="swapToBalance">0</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="swap-rate-info">
+                            <div class="rate-line">
+                                <span>Swap Rate:</span>
+                                <span id="swapRate">1 Gold = 78.4 Silver</span>
+                            </div>
+                            <div class="rate-line">
+                                <span>Swap Fee:</span>
+                                <span id="swapFee">0.3% (₹18.75)</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-lg" onclick="executeSwap()">
+                            <i class="fas fa-exchange-alt"></i>
+                            Execute Swap
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="content-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Portfolio</h1>
+                    <p>Detailed view of your multi-asset holdings</p>
+                </div>
+                
+                <!-- Portfolio Charts -->
+                <div class="portfolio-charts">
+                    <div class="chart-container">
+                        <h3>Asset Allocation</h3>
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Performance Over Time</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Holdings Table -->
+                <div class="holdings-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Balance</th>
+                                <th>Current Value</th>
+                                <th>Invested</th>
+                                <th>P&L</th>
+                                <th>Allocation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdingsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIP Section -->
+        <section id="sip" class="content-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Systematic Investment Plans (SIP)</h1>
+                    <p>Automated investments with ₹50/month fee</p>
+                </div>
+                
+                <div class="sip-interface">
+                    <div class="create-sip">
+                        <h3>Create New SIP</h3>
+                        <form id="sipForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Asset</label>
+                                    <select id="sipAsset">
+                                        <option value="gold">Gold</option>
+                                        <option value="silver">Silver</option>
+                                        <option value="platinum">Platinum</option>
+                                        <option value="stablecoin">BINR</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount (per period)</label>
+                                    <input type="number" id="sipAmount" placeholder="₹1000" min="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Frequency</label>
+                                    <select id="sipFrequency">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="daily">Daily</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="sip-fee-info">
+                                <div class="fee-highlight">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>SIP Fee: ₹50/month (prorated for other frequencies)</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Create SIP Plan
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="active-sips">
+                        <h3>Active SIP Plans</h3>
+                        <div class="sip-cards" id="sipCards">
+                            <!-- Dynamic SIP cards -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="content-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Transaction History</h1>
+                    <p>Complete history of all your transactions</p>
+                </div>
+                
+                <div class="history-filters">
+                    <select id="filterAsset">
+                        <option value="">All Assets</option>
+                        <option value="gold">Gold</option>
+                        <option value="silver">Silver</option>
+                        <option value="platinum">Platinum</option>
+                        <option value="stablecoin">BINR</option>
+                    </select>
+                    <select id="filterType">
+                        <option value="">All Types</option>
+                        <option value="buy">Buy</option>
+                        <option value="sell">Sell</option>
+                        <option value="swap">Swap</option>
+                        <option value="sip">SIP</option>
+                    </select>
+                    <input type="date" id="filterDate">
+                    <button class="btn btn-secondary" onclick="applyFilters()">Apply Filters</button>
+                </div>
+                
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Asset</th>
+                                <th>Amount</th>
+                                <th>Rate</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Fee</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fees Section -->
+        <section id="fees" class="content-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Fee Calculator</h1>
+                    <p>Transparent fee structure for all transactions</p>
+                </div>
+                
+                <div class="fee-structure">
+                    <div class="fee-category">
+                        <h3><i class="fas fa-chart-line"></i> Trading Fees</h3>
+                        <div class="fee-list">
+                            <div class="fee-item">
+                                <span>Buy/Sell Spread</span>
+                                <span class="fee-value">1%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Platform Fee (Buy/Sell)</span>
+                                <span class="fee-value">0.1%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>GST on Fees</span>
+                                <span class="fee-value">18%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fee-category">
+                        <h3><i class="fas fa-exchange-alt"></i> Swap Fees</h3>
+                        <div class="fee-list">
+                            <div class="fee-item">
+                                <span>₹10L+ transactions</span>
+                                <span class="fee-value">0.1%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>₹5L - ₹10L transactions</span>
+                                <span class="fee-value">0.2%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>₹1L - ₹5L transactions</span>
+                                <span class="fee-value">0.3%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>₹50K - ₹1L transactions</span>
+                                <span class="fee-value">0.4%</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>< ₹50K transactions</span>
+                                <span class="fee-value">0.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fee-category">
+                        <h3><i class="fas fa-calendar-alt"></i> SIP Fees</h3>
+                        <div class="fee-list">
+                            <div class="fee-item">
+                                <span>Monthly SIP</span>
+                                <span class="fee-value">₹50/month</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Weekly SIP</span>
+                                <span class="fee-value">₹12.50/week</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Daily SIP</span>
+                                <span class="fee-value">₹1.67/day</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fee-category">
+                        <h3><i class="fas fa-credit-card"></i> Payment Processing</h3>
+                        <div class="fee-list">
+                            <div class="fee-item">
+                                <span>UPI</span>
+                                <span class="fee-value">0.9% or ₹9 max</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Bank Transfer</span>
+                                <span class="fee-value">₹5 + GST</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Credit/Debit Card</span>
+                                <span class="fee-value">1.9% + GST</span>
+                            </div>
+                            <div class="fee-item">
+                                <span>Net Banking</span>
+                                <span class="fee-value">1.5% + GST</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="fee-calculator">
+                    <h3>Calculate Your Fees</h3>
+                    <div class="calculator-form">
+                        <div class="calc-inputs">
+                            <div class="input-group">
+                                <label>Transaction Type</label>
+                                <select id="calcType">
+                                    <option value="buy">Buy</option>
+                                    <option value="sell">Sell</option>
+                                    <option value="swap">Swap</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Asset</label>
+                                <select id="calcAsset">
+                                    <option value="gold">Gold</option>
+                                    <option value="silver">Silver</option>
+                                    <option value="platinum">Platinum</option>
+                                    <option value="stablecoin">BINR</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Amount (INR)</label>
+                                <input type="number" id="calcAmount" placeholder="10000" onchange="calculateFees()">
+                            </div>
+                        </div>
+                        <div class="calc-results" id="calcResults">
+                            <!-- Dynamic fee calculation -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Trade Gold</h2>
+                <span class="modal-close" onclick="closeModal('tradeModal')">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
